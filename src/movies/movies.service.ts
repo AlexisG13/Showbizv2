@@ -156,6 +156,7 @@ export class MoviesService {
       await this.rentalDetailRepository.save(detail);
       await this.moviesRepository.save(detail.movie);
     });
+    this.emailService.sendTransactionEmail(user, newRental, 'rental');
     return this.rentalRepository.save(newRental);
   }
 
