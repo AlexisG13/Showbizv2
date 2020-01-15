@@ -1,0 +1,15 @@
+version: '3'
+services:
+  db:
+    image: postgres
+    volumes:
+      - ./scripts/backup:/docker-entrypoint-initdb.d/init.sql
+  microservice:
+    build: .
+    command: npm run start:prod
+    volumes:
+      - .:/app
+    ports:
+      - '3000:3000'
+    depends_on:
+      - db         
