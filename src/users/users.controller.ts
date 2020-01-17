@@ -66,6 +66,7 @@ export class UsersController {
   }
 
   @Delete('/logout')
+  @ApiBearerAuth()
   @UseGuards(AuthGuard('jwt'), SignedGuard)
   logout(@GetToken() token: string): Promise<void> {
     return this.authService.logout(token);

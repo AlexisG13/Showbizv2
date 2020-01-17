@@ -113,6 +113,7 @@ describe('UsersRepository', () => {
     });
     it('Should throw unathorized error if a wrong password is entered', () => {
       mockUser.validatePassword.mockResolvedValue(false);
+      usersRepository.save = jest.fn().mockResolvedValue(mockUser);
       expect(usersRepository.changePassword(mockUser, mockPasswordDto)).rejects.toThrowError(
         UnauthorizedException,
       );
