@@ -29,7 +29,10 @@ If you wish to use the application via docker compose , please clone the "docker
 $ docker-compose up 
 ```
 ## Email password reset 
+For testing purposes provide an email in your .env file, you should receive an email with a link for resetting your password. Try this link on a application like Postman using the PATCH method, for more info on this try out the Swagger documentation. 
 
+## Documentation
+For reading the documentation , start up the application and enter the following : http://localhost:3000/api
 
 ## Database
 ### 1- Create the database "showbiz" on Postgresql
