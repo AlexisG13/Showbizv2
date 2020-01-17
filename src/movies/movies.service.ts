@@ -3,18 +3,13 @@ import {
   NotFoundException,
   ConflictException,
 } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
 import { Movie } from './entities/movies.entity';
 import { MovieDto } from './dto/create-movie.dto';
 import { UpdateMovieDto } from './dto/update-movie.dto';
 import { MoviesRepository } from './repositories/movies.repository';
 import { UpdateMovieQueryDto } from './dto/update-movie-query.dto';
 import { TagsRepository } from '../tags/repositories/tags.repository';
-import { Repository } from 'typeorm';
-import { Order } from '../users/entities/order.entity ';
 import { GetMovieDto } from './dto/get-movie.dto';
-import { OrderDetail } from '../users/entities/order-detail.entity';
-import { EmailService } from '../email/email.service';
 
 type order = 'DESC' | 'ASC';
 

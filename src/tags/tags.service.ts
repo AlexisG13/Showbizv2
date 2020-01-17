@@ -8,7 +8,6 @@ import { TagsRepository } from './repositories/tags.repository';
 @Injectable()
 export class TagsService {
   constructor(
-    @InjectRepository(TagsRepository)
     private readonly tagsRepository: TagsRepository,
   ) {}
 

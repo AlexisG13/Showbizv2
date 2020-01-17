@@ -2,21 +2,21 @@ import { IsOptional, IsNotEmpty, MinLength, IsArray } from 'class-validator';
 
 export class UpdateMovieDto {
   @IsOptional()
-  title: string;
+  title?: string;
   @IsOptional()
-  description: string;
+  description?: string;
   @IsOptional()
-  poster: string;
+  poster?: string;
   @IsOptional()
-  stock: number;
+  stock?: number;
   @IsOptional()
-  trailer: string;
+  trailer?: string;
   @IsOptional()
-  salePrice: number;
+  salePrice?: number;
   @IsOptional()
-  availability: boolean;
+  availability?: boolean;
   @IsOptional()
   @IsArray()
   @MinLength(1, { each: true })
-  tags: string[];
+  tags?: string[];
 }
