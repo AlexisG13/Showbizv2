@@ -6,7 +6,7 @@ services:
       - ./scripts/backup:/docker-entrypoint-initdb.d/init.sql
   microservice:
     build: .
-    command: npm run start:dev
+    command: npm run start:prod
     volumes:
       - .:/app
     ports:
