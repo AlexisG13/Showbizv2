@@ -8,6 +8,7 @@ import {
   UpdateDateColumn,
 } from 'typeorm';
 import { Movie } from '../../movies/entities/movies.entity';
+import { ApiHideProperty } from '@nestjs/swagger';
 
 @Entity()
 export class Tag {
@@ -21,6 +22,7 @@ export class Tag {
   createDate: Date;
   @UpdateDateColumn()
   updateDate: Date;
+  @ApiHideProperty()
   @ManyToMany(
     type => Movie,
     movie => movie.tags,

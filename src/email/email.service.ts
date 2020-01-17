@@ -18,8 +18,8 @@ export class EmailService {
       devolutionDate = (transaction as Rental).devolutionDate.toDateString;
     }
     const msg = {
-      to: 'gomezalexisj13@gmail.com',
-      from: 'showbiz_movies@test.org',
+      to: this.configService.get('TEST_EMAIL'),
+      from: 'showbiz@movies.test',
       subject: 'Check your latest order details!',
       templateId,
       dynamicTemplateData: { ...transaction, devolutionDate, username: user.username, type },
@@ -30,8 +30,8 @@ export class EmailService {
   sendPassworResetEmail(user: User, token: string): void {
     const templateId = this.configService.get('RESET_TEMPLATE_KEY');
     const msg = {
-      to: 'gomezalexisj13@gmail.com',
-      from: 'showbiz_movies@test.org',
+      to: this.configService.get('TEST_EMAIL'),
+      from: 'showbiz@movies.test',
       templateId,
       dynamicTemplateData: { jwt: `http://localhost:3000/password/set?token=${token}` },
     };

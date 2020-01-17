@@ -12,6 +12,7 @@ import {
 import { Tag } from '../../tags/entities/tags.entity';
 import { OrderDetail } from '../../users/entities/order-detail.entity';
 import { RentalDetail } from '../../rental/entities/rent-detail.entity';
+import { ApiHideProperty } from '@nestjs/swagger';
 
 @Entity()
 export class Movie {
@@ -39,16 +40,19 @@ export class Movie {
   createDate?: Date;
   @UpdateDateColumn()
   updateDate?: Date;
+  @ApiHideProperty()
   @OneToMany(
     type => OrderDetail,
     order => order.movie,
   )
   orders?: OrderDetail[];
+  @ApiHideProperty()
   @OneToMany(
     type => RentalDetail,
     rental => rental.movie,
   )
   rentals?: RentalDetail[];
+  @ApiHideProperty()
   @ManyToMany(
     type => Tag,
     tag => tag.movies,

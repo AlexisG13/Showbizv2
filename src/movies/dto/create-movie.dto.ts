@@ -1,4 +1,5 @@
-import { IsDefined, IsArray, MinLength } from 'class-validator';
+import { IsDefined, IsArray, MinLength, IsOptional } from 'class-validator';
+import { ApiProperty } from '@nestjs/swagger';
 
 export class MovieDto {
   @IsDefined()
@@ -15,6 +16,22 @@ export class MovieDto {
   salePrice: number;
   @IsDefined()
   availability: boolean;
+  @IsDefined()
+  likes: number;
+  @ApiProperty({
+    example: [
+      'HORROR',
+      'ACTION',
+      'COMEDY',
+      'DRAMA',
+      'ROMANCE',
+      'ADVENTURE',
+      'WESTERN',
+      'NOIR',
+      'FICTION',
+      'ANIMATED',
+    ],
+  })
   @IsDefined()
   @IsArray()
   @MinLength(1, { each: true })

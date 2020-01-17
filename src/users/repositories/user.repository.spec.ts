@@ -108,8 +108,8 @@ describe('UsersRepository', () => {
     it('Should change password of an user', () => {
       const genSalt = jest.fn().mockResolvedValue('A salt');
       const hash = jest.fn().mockResolvedValue('A hashed password');
-      const result = usersRepository.changePassword(mockUser, mockPasswordDto);
-      expect(result).resolves.not.toThrow();
+      usersRepository.save = jest.fn().mockResolvedValue(mockUser);
+      expect(usersRepository.changePassword(mockUser, mockPasswordDto)).resolves.not.toThrow();
     });
     it('Should throw unathorized error if a wrong password is entered', () => {
       mockUser.validatePassword.mockResolvedValue(false);

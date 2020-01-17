@@ -1,8 +1,8 @@
 import { Injectable, CanActivate, ExecutionContext } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
-import { User } from 'src/users/entities/users.entity';
+import { User } from '../../users/entities/users.entity';
 import { InjectRepository } from '@nestjs/typeorm';
-import { JWT } from 'src/users/entities/jwt.entity';
+import { JWT } from '../../users/entities/jwt.entity';
 import { Repository } from 'typeorm';
 
 @Injectable()

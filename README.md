@@ -20,8 +20,22 @@ A simple API for news searching on the New York Times API and The Guardian API!.
 ```bash
 $ npm install
 ```
+
+## Docker installation
+
+If you wish to use the application via docker compose , please clone the "docker" branch  and run the following command.
+
+```bash 
+$ docker-compose up 
+```
+## Email password reset 
+For testing purposes provide an email in your .env file, you should receive an email with a link for resetting your password. Try this link on a application like Postman using the PATCH method, for more info on this try out the Swagger documentation. 
+
+## Documentation
+For reading the documentation , start up the application and enter the following : http://localhost:3000/api
+
 ## Database
-### 1- Create the database "miChero" on Postgresql
+### 1- Create the database "showbiz" on Postgresql
 
 ### 2- Restore the dump included in the scripts directory
 
@@ -30,7 +44,7 @@ $ npm install
 ```
 ## Enviroment variables
 
-### A sample .env file is included on the root directory; if you wish to provide your own .env file you should include all the required variables in the sample .env file.
+### A sample .env.example file is included on the root directory; if you wish to provide your own .env file you should include all the required variables in the sample .env file.
 
 ## Running the app
 
