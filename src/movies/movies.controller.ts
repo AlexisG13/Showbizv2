@@ -21,7 +21,9 @@ import { GetUser } from 'src/users/decorators/get-user.decorator';
 import { User } from 'src/users/entities/users.entity';
 import { RolesGuard } from 'src/auth/guards/role.guard';
 import { SignedGuard } from 'src/auth/guards/signed.guard';
+import { ApiTags } from '@nestjs/swagger';
 
+@ApiTags('movies')
 @Controller('movies')
 export class MoviesController {
   constructor(private readonly moviesService: MoviesService) {}

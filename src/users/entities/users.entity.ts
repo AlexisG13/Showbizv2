@@ -10,56 +10,60 @@ import {
   OneToMany,
 } from 'typeorm';
 import { hash } from 'bcrypt';
-import { Exclude } from 'class-transformer';
 import { Role } from './role.entity';
 import { JWT } from './jwt.entity';
 import { Order } from './order.entity ';
-import { Rental } from './rental.entity';
+import { Rental } from '../../rental/entities/rental.entity';
+import { ResetToken } from '../../auth/entities/password-jwt.entity';
 
 @Entity()
 @Unique(['username'])
 export class User {
   @PrimaryGeneratedColumn()
-  id: number;
+  id?: number;
   @Column()
-  username: string;
+  username?: string;
   @Column()
-  email: string;
+  email?: string;
   @Column()
-  @Exclude()
-  password: string;
+  password?: string;
   @Column()
-  @Exclude()
-  salt: string;
+  salt?: string;
   @CreateDateColumn({ default: new Date() })
   createdAt?: Date;
   @UpdateDateColumn({ default: new Date() })
   updatedAt?: Date;
   @Column({ default: true })
-  isActive: boolean;
+  isActive?: boolean;
   @ManyToOne(
     type => Role,
     role => role.users,
     { eager: true },
   )
-  role: Role;
+  role?: Role;
   @OneToMany(
     type => JWT,
     jwt => jwt.user,
   )
-  jwts: JWT[];
+  jwts?: JWT[];
+
+  @OneToMany(
+    type => ResetToken,
+    resetToken => resetToken.user,
+  )
+  resetTokens?: ResetToken[];
 
   @OneToMany(
     type => Rental,
     rental => rental.user,
   )
-  rents: Rental[];
+  rents?: Rental[];
 
   @OneToMany(
     type => Order,
     order => order.user,
   )
-  orders: Order[];
+  orders?: Order[];
 
   async validatePassword(password: string): Promise<boolean> {
     const validate = await hash(password, this.salt);

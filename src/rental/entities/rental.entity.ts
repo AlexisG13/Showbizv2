@@ -8,7 +8,7 @@ import {
   UpdateDateColumn,
   OneToMany,
 } from 'typeorm';
-import { User } from './users.entity';
+import { User } from '../../users/entities/users.entity';
 import { RentalDetail } from './rent-detail.entity';
 
 @Entity()
@@ -24,17 +24,17 @@ export class Rental {
   @UpdateDateColumn()
   updatedDate?: Date;
   @Column({ default: false })
-  isReturned: boolean;
+  isReturned?: boolean;
   @Column()
   devolutionDate?: Date;
   @ManyToOne(
     type => User,
     user => user.orders,
   )
-  user: User;
+  user?: User;
   @OneToMany(
     type => RentalDetail,
     detail => detail.rental,
   )
-  details: RentalDetail[];
+  details?: RentalDetail[];
 }

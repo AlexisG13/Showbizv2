@@ -1,5 +1,5 @@
 import { IsDefined, IsArray, ValidateNested, IsDateString } from 'class-validator';
-import { OrderDetailDto } from './order-detail.dto';
+import { OrderDetailDto } from '../../users/dto/order-detail.dto';
 import { Type } from 'class-transformer';
 
 export class RentDto {

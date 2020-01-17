@@ -2,11 +2,11 @@ import { IsOptional } from 'class-validator';
 
 export class GetMovieDto {
   @IsOptional()
-  sort: string;
+  sort?: string;
   @IsOptional()
-  filter: string;
+  filter?: string;
   @IsOptional()
-  tags: string;
+  tags?: string;
   @IsOptional()
-  query: string;
+  query?: string;
 }

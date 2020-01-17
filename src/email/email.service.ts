@@ -2,7 +2,7 @@ import * as sgMail from '@sendgrid/mail';
 import { Injectable } from '@nestjs/common';
 import { User } from 'src/users/entities/users.entity';
 import { Order } from 'src/users/entities/order.entity ';
-import { Rental } from 'src/users/entities/rental.entity';
+import { Rental } from 'src/rental/entities/rental.entity';
 
 @Injectable()
 export class EmailService {
@@ -22,6 +22,17 @@ export class EmailService {
       subject: 'Check your latest order details!',
       templateId,
       dynamicTemplateData: { ...transaction, devolutionDate, username: user.username, type },
+    };
+    sgMail.send(msg);
+  }
+
+  sendPassworResetEmail(user: User, token: string): void {
+    const templateId = 'd-a55fe3db91dd4242b77160d5435ebbdf';
+    const msg = {
+      to: 'gomezalexisj13@gmail.com',
+      from: 'showbiz_movies@test.org',
+      templateId,
+      dynamicTemplateData: { jwt: `http://localhost:3000/password/set?token=${token}` },
     };
     sgMail.send(msg);
   }
