@@ -15,7 +15,9 @@ import { TagsService } from './tags.service';
 import { TagDto } from './dto/tag.dto';
 import { AuthGuard } from '@nestjs/passport';
 import { RolesGuard } from '../auth/guards/role.guard';
+import { ApiTags } from '@nestjs/swagger';
 
+@ApiTags('tags')
 @Controller('tags')
 export class TagsController {
   constructor(private readonly tagsService: TagsService) {}

@@ -17,11 +17,11 @@ import { Movie } from './entities/movies.entity';
 import { MovieDto } from './dto/create-movie.dto';
 import { UpdateMovieDto } from './dto/update-movie.dto';
 import { AuthGuard } from '@nestjs/passport';
-import { GetUser } from 'src/users/decorators/get-user.decorator';
-import { User } from 'src/users/entities/users.entity';
-import { RolesGuard } from 'src/auth/guards/role.guard';
-import { SignedGuard } from 'src/auth/guards/signed.guard';
-import { ApiTags } from '@nestjs/swagger';
+import { GetUser } from '../users/decorators/get-user.decorator';
+import { User } from '../users/entities/users.entity';
+import { RolesGuard } from '../auth/guards/role.guard';
+import { SignedGuard } from '../auth/guards/signed.guard';
+import { ApiTags, ApiBearerAuth } from '@nestjs/swagger';
 
 @ApiTags('movies')
 @Controller('movies')
@@ -39,12 +39,14 @@ export class MoviesController {
   }
 
   @Delete(':id')
+  @ApiBearerAuth()
   @UseGuards(AuthGuard('jwt'), RolesGuard, SignedGuard)
   deleteMovie(@Param('id') movieId: number): Promise<void> {
     return this.moviesService.deleteMovie(movieId);
   }
 
   @Post()
+  @ApiBearerAuth()
   @UseGuards(AuthGuard('jwt'), RolesGuard, SignedGuard)
   @UsePipes(new ValidationPipe({ forbidUnknownValues: true }))
   addMovie(@Body() movieDto: MovieDto, @GetUser() user: User): Promise<Movie> {
@@ -52,6 +54,7 @@ export class MoviesController {
   }
 
   @Patch(':id')
+  @ApiBearerAuth()
   @UseGuards(AuthGuard('jwt'), RolesGuard, SignedGuard)
   @UsePipes(new ValidationPipe({ forbidUnknownValues: true }))
   updateMovie(

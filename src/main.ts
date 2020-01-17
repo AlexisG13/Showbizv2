@@ -11,6 +11,7 @@ async function bootstrap(): Promise<void> {
     .addBearerAuth()
     .addTag('users')
     .addTag('movies')
+    .addTag('tags')
     .build();
   const document = SwaggerModule.createDocument(app, options);
   SwaggerModule.setup('api', app, document);

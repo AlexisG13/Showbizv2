@@ -3,12 +3,12 @@ import { PassportModule } from '@nestjs/passport';
 import { JwtModule } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { UsersRepository } from 'src/users/repositories/user.repository';
+import { UsersRepository } from '../users/repositories/user.repository';
 import { JwtStrategy } from './jwt.strategy';
 import { AuthService } from './auth.service';
-import { JWT } from 'src/users/entities/jwt.entity';
-import { Role } from 'src/users/entities/role.entity';
-import { EmailModule } from 'src/email/email.module';
+import { JWT } from '../users/entities/jwt.entity';
+import { Role } from '../users/entities/role.entity';
+import { EmailModule } from '../email/email.module';
 import { ResetToken } from './entities/password-jwt.entity';
 import { JwtResetStrategy } from './reset-password.stategy';
 

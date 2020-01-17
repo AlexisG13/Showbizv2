@@ -1,8 +1,4 @@
-import {
-  Injectable,
-  NotFoundException,
-  ConflictException,
-} from '@nestjs/common';
+import { Injectable, NotFoundException, ConflictException } from '@nestjs/common';
 import { Movie } from './entities/movies.entity';
 import { MovieDto } from './dto/create-movie.dto';
 import { UpdateMovieDto } from './dto/update-movie.dto';
@@ -32,7 +28,7 @@ export class MoviesService {
     }
     let tagsNumber = 0;
     if (query.tags) {
-      const auxTags = query.tags.split(',').map(tag => tag.toLowerCase);
+      const auxTags = query.tags.split(',').map(tag => tag.toLowerCase());
       tagsNumber = auxTags.length;
       myQuery = myQuery.andWhere('LOWER(tag.title) IN (:...auxTags)', { auxTags });
     }
@@ -86,10 +82,13 @@ export class MoviesService {
   }
 
   async addMovie(movieDto: MovieDto): Promise<Movie> {
-    const availableTags = await this.tagsRepository
-      .createQueryBuilder('tag')
-      .where('tag.title IN (:...tags)', { tags: movieDto.tags })
-      .getMany();
+    let availableTags = [];
+    if (movieDto.tags) {
+      availableTags = await this.tagsRepository
+        .createQueryBuilder('tag')
+        .where('tag.title IN (:...tags)', { tags: movieDto.tags })
+        .getMany();
+    }
     return this.moviesRepository.addMovie(movieDto, availableTags);
   }
 

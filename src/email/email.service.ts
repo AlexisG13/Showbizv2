@@ -19,7 +19,7 @@ export class EmailService {
     }
     const msg = {
       to: this.configService.get('TEST_EMAIL'),
-      from: 'showbiz_movies@test.org',
+      from: 'showbiz@movies.test',
       subject: 'Check your latest order details!',
       templateId,
       dynamicTemplateData: { ...transaction, devolutionDate, username: user.username, type },
@@ -31,7 +31,7 @@ export class EmailService {
     const templateId = this.configService.get('RESET_TEMPLATE_KEY');
     const msg = {
       to: this.configService.get('TEST_EMAIL'),
-      from: 'showbiz_movies@test.org',
+      from: 'showbiz@movies.test',
       templateId,
       dynamicTemplateData: { jwt: `http://localhost:3000/password/set?token=${token}` },
     };

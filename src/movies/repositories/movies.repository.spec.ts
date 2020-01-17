@@ -11,6 +11,7 @@ const mockMovieDto = {
   salePrice: 0,
   tags: [],
   availability: false,
+  likes: 0,
 };
 
 const mockMovie = {

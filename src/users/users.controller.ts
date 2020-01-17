@@ -149,15 +149,17 @@ export class UsersController {
   @Get(':userId')
   @UseGuards(AuthGuard('jwt'), SignedGuard, RolesGuard)
   @ApiBearerAuth()
-  getUser(@Param('userId') userId: number): Promise<User> {
-    return this.usersService.getUser(userId);
+  async getUser(@Param('userId') userId: number): Promise<UserSerializer> {
+    return new UserSerializer(await this.usersService.getUser(userId));
   }
 
   @Get('')
   @UseGuards(AuthGuard('jwt'), SignedGuard, RolesGuard)
   @ApiBearerAuth()
-  getAllUsers(): Promise<User[]> {
-    return this.usersService.getAllUsers();
+  async getAllUsers(): Promise<UserSerializer[]> {
+    return await (await this.usersService.getAllUsers()).map(user => {
+      return new UserSerializer(user);
+    });
   }
 
   @Get('orders')
@@ -182,10 +184,10 @@ export class UsersController {
   @Patch('password/set')
   @UseGuards(AuthGuard('jwt-reset'), ResetTokenGuard)
   resetPassword(
-    @Query() token: ResetTokenDto,
+    @Query('token') token: string,
     @Body() newPassword: NewPasswordDto,
     @GetUser() user: User,
   ): void {
-    this.authService.resetPassword(user, newPassword, token.jwt);
+    this.authService.resetPassword(user, newPassword, token);
   }
 }
