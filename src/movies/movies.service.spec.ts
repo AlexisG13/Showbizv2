@@ -2,7 +2,7 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { MoviesService } from './movies.service';
 import { TagsRepository } from '../tags/repositories/tags.repository';
 import { MoviesRepository } from './repositories/movies.repository';
-import { NotFoundException } from '@nestjs/common';
+import { NotFoundException, ConflictException } from '@nestjs/common';
 import { Rental } from '../rental/entities/rental.entity';
 import { getRepositoryToken } from '@nestjs/typeorm';
 
@@ -12,6 +12,14 @@ const mockMoviesRepository = () => ({
   save: jest.fn(),
   update: jest.fn(),
   addMovie: jest.fn().mockResolvedValue(mockMovie),
+  createQueryBuilder: jest.fn(() => ({
+    select: jest.fn().mockReturnThis(),
+    leftJoinAndSelect: jest.fn().mockReturnThis(),
+    where: jest.fn().mockReturnThis(),
+    andWhere: jest.fn().mockReturnThis(),
+    getMany: jest.fn().mockReturnValue([]),
+    orderBy: jest.fn().mockReturnThis(),
+  })),
 });
 
 const mockTagsRepository = () => ({
@@ -48,6 +56,35 @@ const mockAddMovie = {
   tags: [],
 };
 
+const mockUpdateMovieNoTags = {
+  title: 'New Test title',
+  description: ' Test description',
+  salePrice: 0,
+  stock: 0,
+  availability: true,
+  likes: 0,
+  poster: 'test poster',
+  trailer: 'test trailer',
+};
+
+const mockUpdateMovieWithTags = {
+  title: 'New Test title',
+  description: ' Test description',
+  salePrice: 0,
+  stock: 0,
+  availability: true,
+  likes: 0,
+  poster: 'test poster',
+  trailer: 'test trailer',
+  tags: [],
+};
+
+const mockGetMovieDto = {
+  sort: 'title-asc',
+  tags: 'test-tag',
+  query: 'Test movie title',
+};
+
 describe('MoviesService', () => {
   let moviesService: MoviesService;
   let tagsRepository: TagsRepository;
@@ -73,16 +110,6 @@ describe('MoviesService', () => {
     expect(moviesRepository).toBeDefined();
     expect(tagsRepository).toBeDefined();
   });
-
-  // describe('getAllMovies', () => {
-  //   it('get all movies from the repository', async () => {
-  //     (moviesRepository.find as jest.Mock).mockResolvedValue('Returns all movies');
-  //     expect(moviesRepository.find).not.toHaveBeenCalled();
-  //     const result = await moviesService.getAllMovies();
-  //     expect(moviesRepository.find).toHaveBeenCalled();
-  //     expect(result).toEqual('Returns all movies');
-  //   });
-  // });
 
   describe('getSingleMovie', () => {
     it('get a single movie from the repository', async () => {
@@ -116,6 +143,10 @@ describe('MoviesService', () => {
       expect(moviesRepository.findOne).toHaveBeenCalled();
       expect(result).toBeUndefined();
     });
+    it('Should throw error if movie does not exist', () => {
+      (moviesRepository.findOne as jest.Mock).mockResolvedValue(null);
+      expect(moviesService.deleteMovie(0)).rejects.toThrowError(NotFoundException);
+    });
   });
 
   describe('getSort', () => {
@@ -138,6 +169,53 @@ describe('MoviesService', () => {
     it('get no sort when unknown sort criteria is given', () => {
       const result = moviesService.getSort({ sort: 'unknown-sort-criteria' });
       expect(result).toEqual(null);
+    });
+  });
+
+  describe('updateMovie', () => {
+    it('Should update a movie, without updating tags', async () => {
+      (moviesRepository.findOne as jest.Mock)
+        .mockResolvedValueOnce(mockMovie)
+        .mockResolvedValueOnce(null);
+      (moviesRepository.save as jest.Mock).mockResolvedValue(mockMovie);
+      const result = await moviesService.updateMovie(0, mockUpdateMovieNoTags);
+      expect(result).toEqual(mockMovie);
+    });
+
+    it('Should update a movie, including tags', async () => {
+      (moviesRepository.findOne as jest.Mock)
+        .mockResolvedValueOnce(mockMovie)
+        .mockResolvedValueOnce(null);
+      (moviesRepository.save as jest.Mock).mockResolvedValue(mockMovie);
+      const result = await moviesService.updateMovie(0, mockUpdateMovieWithTags);
+      expect(result).toEqual(mockMovie);
+    });
+
+    it('Should throw a NotFound error if the movie does not exist', async () => {
+      (moviesRepository.findOne as jest.Mock).mockResolvedValue(null);
+      expect(moviesService.updateMovie(0, mockUpdateMovieNoTags)).rejects.toThrowError(
+        NotFoundException,
+      );
+    });
+
+    it('Should throw a conflict error in a movie with the new title already exists', async () => {
+      (moviesRepository.findOne as jest.Mock)
+        .mockResolvedValueOnce(mockMovie)
+        .mockResolvedValueOnce(true);
+      expect(moviesService.updateMovie(0, mockUpdateMovieNoTags)).rejects.toThrowError(
+        ConflictException,
+      );
+    });
+  });
+
+  describe('getAllMovies', () => {
+    it('Get all movies without any options', async () => {
+      const result = await moviesService.getAllMovies({});
+      expect(result).toEqual([]);
+    });
+    it('Get all movies, including sorting, query and tags', async () => {
+      const result = await moviesService.getAllMovies(mockGetMovieDto);
+      expect(result).toEqual([]);
     });
   });
 });

@@ -7,6 +7,7 @@ import { OrderDetail } from '../users/entities/order-detail.entity';
 import { MoviesRepository } from '../movies/repositories/movies.repository';
 import { Repository } from 'typeorm';
 import { NotFoundException, ConflictException } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 
 const mockOrderRepistory = () => ({
   find: jest.fn(),
@@ -59,6 +60,7 @@ describe('OrderService', () => {
       providers: [
         OrderService,
         EmailService,
+        ConfigService,
         { provide: getRepositoryToken(Order), useFactory: mockOrderRepistory },
         { provide: getRepositoryToken(OrderDetail), useFactory: mockOrderDetailRepistory },
         { provide: MoviesRepository, useFactory: mockOrderRepistory },
