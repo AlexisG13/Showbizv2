@@ -7,12 +7,12 @@ import { ConfigService } from '@nestjs/config';
 
 @Injectable()
 export class EmailService {
-  constructor(configService: ConfigService) {
+  constructor(private readonly configService: ConfigService) {
     sgMail.setApiKey(configService.get('SENDGRID_API_KEY'));
   }
 
   sendTransactionEmail(user: User, transaction: Order | Rental, type: string): void {
-    const templateId = 'd-2f7c7a6e8c31405b837d8bf9977435a1';
+    const templateId = this.configService.get('TRANSACTION_TEMPLATE_KEY');
     let devolutionDate;
     if (type === 'rental') {
       devolutionDate = (transaction as Rental).devolutionDate.toDateString;
@@ -28,7 +28,7 @@ export class EmailService {
   }
 
   sendPassworResetEmail(user: User, token: string): void {
-    const templateId = 'd-a55fe3db91dd4242b77160d5435ebbdf';
+    const templateId = this.configService.get('RESET_TEMPLATE_KEY');
     const msg = {
       to: 'gomezalexisj13@gmail.com',
       from: 'showbiz_movies@test.org',

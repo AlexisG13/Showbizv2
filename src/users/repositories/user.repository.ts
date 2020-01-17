@@ -1,7 +1,7 @@
 import { User } from '../entities/users.entity';
 import { EntityRepository, Repository } from 'typeorm';
 import { AuthCredentialsDto } from 'src/auth/dto/auth.credentials.dto';
-import { ConflictException, UnauthorizedException } from '@nestjs/common';
+import { ConflictException, UnauthorizedException, NotFoundException } from '@nestjs/common';
 import { genSalt, hash } from 'bcrypt';
 import { PasswordChangeDto } from '../dto/password-change.dto';
 import { Role } from '../entities/role.entity';
@@ -23,6 +23,9 @@ export class UsersRepository extends Repository<User> {
 
   async resetPassword(userId: number, newPassword: string): Promise<void> {
     const user = await this.findOne(userId);
+    if (!user) {
+      throw new NotFoundException('User does not exist');
+    }
     const salt = await genSalt();
     const hashedPassword = await hash(newPassword, salt);
     user.password = hashedPassword;
