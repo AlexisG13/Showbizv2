@@ -2,22 +2,16 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Order } from './entities/order.entity ';
 import { Repository } from 'typeorm';
-import { MoviesRepository } from 'src/movies/repositories/movies.repository';
 import { User } from './entities/users.entity';
 import { UsersRepository } from './repositories/user.repository';
 import { Role } from './entities/role.entity';
 import { RoleDto } from './dto/role.dto';
-import { Rental } from './entities/rental.entity';
 
 @Injectable()
 export class UsersService {
   constructor(
     @InjectRepository(Order)
     private readonly orderRepository: Repository<Order>,
-    @InjectRepository(MoviesRepository)
-    private readonly movieRepository: MoviesRepository,
-    @InjectRepository(Rental)
-    private readonly rentalRepository: Repository<Rental>,
     @InjectRepository(UsersRepository)
     private readonly userRepository: UsersRepository,
     @InjectRepository(Role)
@@ -56,13 +50,5 @@ export class UsersService {
 
   getAllUsers(): Promise<User[]> {
     return this.userRepository.find();
-  }
-
-  getOrders(user: User): Promise<Order[]> {
-    return this.orderRepository.find({ userId: user.id });
-  }
-
-  getRentals(user: User): Promise<Rental[]> {
-    return this.rentalRepository.find({ userId: user.id });
   }
 }

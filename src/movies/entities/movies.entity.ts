@@ -10,50 +10,50 @@ import {
   UpdateDateColumn,
 } from 'typeorm';
 import { Tag } from '../../tags/entities/tags.entity';
-import { OrderDetail } from 'src/users/entities/order-detail.entity';
-import { RentalDetail } from 'src/users/entities/rent-detail.entity';
+import { OrderDetail } from '../../users/entities/order-detail.entity';
+import { RentalDetail } from '../../rental/entities/rent-detail.entity';
 
 @Entity()
 export class Movie {
   @PrimaryGeneratedColumn()
-  id: number;
+  id?: number;
   @Column()
-  title: string;
+  title?: string;
   @Column()
-  description: string;
+  description?: string;
   @Column()
-  poster: string;
+  poster?: string;
   @Column()
-  stock: number;
+  stock?: number;
   @Column()
-  trailer: string;
+  trailer?: string;
   @Column()
-  salePrice: number;
+  salePrice?: number;
   @Column({ default: 0 })
-  likes: number;
+  likes?: number;
   @Column()
-  availability: boolean;
+  availability?: boolean;
   @Column({ default: true })
-  isActive: boolean;
+  isActive?: boolean;
   @CreateDateColumn()
-  createDate: Date;
+  createDate?: Date;
   @UpdateDateColumn()
-  updateDate: Date;
+  updateDate?: Date;
   @OneToMany(
     type => OrderDetail,
     order => order.movie,
   )
-  orders: OrderDetail[];
+  orders?: OrderDetail[];
   @OneToMany(
     type => RentalDetail,
     rental => rental.movie,
   )
-  rentals: RentalDetail[];
+  rentals?: RentalDetail[];
   @ManyToMany(
     type => Tag,
     tag => tag.movies,
     { eager: true },
   )
   @JoinTable()
-  tags: Tag[];
+  tags?: Tag[];
 }

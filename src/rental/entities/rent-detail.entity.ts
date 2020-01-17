@@ -1,5 +1,6 @@
+/* istanbul ignore file */
 import { Entity, PrimaryGeneratedColumn, Column, ManyToOne } from 'typeorm';
-import { Movie } from 'src/movies/entities/movies.entity';
+import { Movie } from '../../movies/entities/movies.entity';
 import { Rental } from './rental.entity';
 
 @Entity()

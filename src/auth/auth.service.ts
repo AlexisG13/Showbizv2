@@ -1,4 +1,9 @@
-import { Injectable, UnauthorizedException, NotFoundException } from '@nestjs/common';
+import {
+  Injectable,
+  UnauthorizedException,
+  NotFoundException,
+  BadRequestException,
+} from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { InjectRepository } from '@nestjs/typeorm';
 import { UsersRepository } from 'src/users/repositories/user.repository';
@@ -8,9 +13,13 @@ import { PasswordChangeDto } from 'src/users/dto/password-change.dto';
 import { User } from 'src/users/entities/users.entity';
 import { JWT } from 'src/users/entities/jwt.entity';
 import { Repository } from 'typeorm';
-import { ConfigService } from '@nestjs/config';
+import { sign } from 'jsonwebtoken';
 import { Role } from 'src/users/entities/role.entity';
 import { LoginCredentialsDto } from './dto/login-credentials.dto';
+import { EmailService } from 'src/email/email.service';
+import { ResetPasswordDto } from './dto/reset-password.dto';
+import { ResetToken } from './entities/password-jwt.entity';
+import { NewPasswordDto } from './dto/new-password.dto';
 
 @Injectable()
 export class AuthService {
@@ -20,9 +29,11 @@ export class AuthService {
     private readonly usersRepository: UsersRepository,
     @InjectRepository(JWT)
     private readonly jwtRepository: Repository<JWT>,
-    private readonly configService: ConfigService,
+    private readonly emailService: EmailService,
     @InjectRepository(Role)
     private readonly roleRepository: Repository<Role>,
+    @InjectRepository(ResetToken)
+    private readonly resetTokenRepository: Repository<ResetToken>,
   ) {}
 
   async signUp(authCredentialsDto: AuthCredentialsDto): Promise<User> {
@@ -50,5 +61,28 @@ export class AuthService {
 
   async changePassword(user: User, passwordDto: PasswordChangeDto): Promise<void> {
     return this.usersRepository.changePassword(user, passwordDto);
+  }
+
+  async sendPasswordReset(resetPassword: ResetPasswordDto): Promise<void> {
+    const user = await this.usersRepository.findOne({ where: { email: resetPassword.email } });
+    if (!user) {
+      return;
+    }
+    const oldResetToken = await this.resetTokenRepository.findOne({ where: { user } });
+    if (oldResetToken) {
+      await this.resetTokenRepository.delete(oldResetToken);
+    }
+    const resetToken = sign({ username: user.username }, 'reset-secret', { expiresIn: 3600 });
+    this.resetTokenRepository.save({ jwt: resetToken, user });
+    this.emailService.sendPassworResetEmail(user, resetToken);
+    return;
+  }
+
+  async resetPassword(user: User, newPassword: NewPasswordDto, token: string): Promise<void> {
+    if (newPassword.newPassword !== newPassword.newPasswordValidation) {
+      throw new BadRequestException(`The passwords don't match`);
+    }
+    await this.usersRepository.resetPassword(user.id, newPassword.newPasswordValidation);
+    this.resetTokenRepository.delete({ jwt: token });
   }
 }

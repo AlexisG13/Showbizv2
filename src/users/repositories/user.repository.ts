@@ -21,6 +21,15 @@ export class UsersRepository extends Repository<User> {
     return this.save(user);
   }
 
+  async resetPassword(userId: number, newPassword: string): Promise<void> {
+    const user = await this.findOne(userId);
+    const salt = await genSalt();
+    const hashedPassword = await hash(newPassword, salt);
+    user.password = hashedPassword;
+    user.salt = salt;
+    this.save(user);
+  }
+
   async validatePassword(loginCredentials: LoginCredentialsDto): Promise<User | null> {
     const { username, password } = loginCredentials;
     const user = await this.findOne({ username });

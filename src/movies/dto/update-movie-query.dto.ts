@@ -1,4 +1,3 @@
-/* istanbul ignore file */
 import { Tag } from 'src/tags/entities/tags.entity';
 import { Movie } from '../entities/movies.entity';
 
@@ -12,6 +11,7 @@ export class UpdateMovieQueryDto {
   salePrice: number;
   availability: boolean;
   tags: Tag[];
+
   constructor(movie: Movie) {
     this.id = movie.id;
     this.title = movie.title;

@@ -10,8 +10,8 @@ import { JWT } from 'src/users/entities/jwt.entity';
 import { Order } from 'src/users/entities/order.entity ';
 import { OrderDetail } from 'src/users/entities/order-detail.entity';
 import { EmailModule } from 'src/email/email.module';
-import { Rental } from 'src/users/entities/rental.entity';
-import { RentalDetail } from 'src/users/entities/rent-detail.entity';
+import { Rental } from 'src/rental/entities/rental.entity';
+import { RentalDetail } from 'src/rental/entities/rent-detail.entity';
 
 @Module({
   providers: [MoviesService],

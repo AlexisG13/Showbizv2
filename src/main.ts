@@ -1,10 +1,19 @@
-import { NestFactory, Reflector } from '@nestjs/core';
+import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
-import { ClassSerializerInterceptor } from '@nestjs/common';
+import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 
 async function bootstrap(): Promise<void> {
   const app = await NestFactory.create(AppModule);
-  app.useGlobalInterceptors(new ClassSerializerInterceptor(app.get(Reflector)));
+  const options = new DocumentBuilder()
+    .setTitle('Showbiz API')
+    .setDescription('The Showbiz API for movie buys and rentals!')
+    .setVersion('1.0')
+    .addBearerAuth()
+    .addTag('users')
+    .addTag('movies')
+    .build();
+  const document = SwaggerModule.createDocument(app, options);
+  SwaggerModule.setup('api', app, document);
   await app.listen(3000);
 }
 bootstrap();

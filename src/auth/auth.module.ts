@@ -8,9 +8,12 @@ import { JwtStrategy } from './jwt.strategy';
 import { AuthService } from './auth.service';
 import { JWT } from 'src/users/entities/jwt.entity';
 import { Role } from 'src/users/entities/role.entity';
+import { EmailModule } from 'src/email/email.module';
+import { ResetToken } from './entities/password-jwt.entity';
+import { JwtResetStrategy } from './reset-password.stategy';
 
 @Module({
-  providers: [JwtStrategy, AuthService],
+  providers: [JwtStrategy, AuthService, JwtResetStrategy],
   imports: [
     PassportModule.register({ defaultStrategy: 'jwt' }),
     JwtModule.registerAsync({
@@ -20,8 +23,9 @@ import { Role } from 'src/users/entities/role.entity';
       }),
       inject: [ConfigService],
     }),
-    TypeOrmModule.forFeature([UsersRepository, JWT, Role]),
+    TypeOrmModule.forFeature([UsersRepository, JWT, Role, ResetToken]),
+    EmailModule,
   ],
-  exports: [JwtStrategy, AuthService],
+  exports: [JwtStrategy, AuthService, JwtResetStrategy],
 })
 export class AuthModule {}
