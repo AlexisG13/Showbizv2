@@ -3,11 +3,12 @@ import { Injectable } from '@nestjs/common';
 import { User } from 'src/users/entities/users.entity';
 import { Order } from 'src/users/entities/order.entity ';
 import { Rental } from 'src/rental/entities/rental.entity';
+import { ConfigService } from '@nestjs/config';
 
 @Injectable()
 export class EmailService {
-  constructor() {
-    sgMail.setApiKey('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');
+  constructor(configService : ConfigService) {
+    sgMail.setApiKey(configService.get('SENDGRID_API_KEY'));
   }
 
   sendTransactionEmail(user: User, transaction: Order | Rental, type: string): void {
