@@ -3,7 +3,7 @@ services:
   db:
     image: postgres
     volumes:
-      - ./scripts/backup:/docker-entrypoint-initdb.d/init.sql
+      - ./scripts/backup.sql:/docker-entrypoint-initdb.d/init.sql
   microservice:
     build: .
     command: npm run start:prod
