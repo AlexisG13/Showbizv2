@@ -62,6 +62,5 @@ $ npm run start:dev
 - Prettier and Eslint where used, both for linting a formatting the code.
 
 ### API Usage: 
-The documentation can be found on the following link: 
-https://documenter.getpostman.com/view/9661494/SWLiY5CV?version=latest
+You can use the following admin user for testing:  username: admin password: 1234
 
